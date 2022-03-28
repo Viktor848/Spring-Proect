@@ -18,22 +18,24 @@
             <th>Damage</th>
             <th>Defense</th>
             <th>Size</th>
+
         </tr>
         </thead>
         <tbody>
-        <tr th:each="pokemons: ${listPokemon}">
-            <td th:text="${pokemons.id}">Pokemon ID</td>
-            <td th:text="${pokemons.name}">Name</td>
-            <td th:text="${pokemons.element}">Element</td>
-            <td th:text="${pokemons.health}">Health</td>
-            <td th:text="${pokemons.damage}">Damage</td>
-            <td th:text="${pokemons.defense}">Defense</td>
-            <td th:text="${pokemons.size}">Size</td>
+        <tr th:each="pokemon: ${listPokemons}">
+            <td th:text="${pokemon.id}">Pokemon ID</td>
+            <td th:text="${pokemon.name}">Name</td>
+            <td th:text="${pokemon.element}">Element</td>
+            <td th:text="${pokemon.health}">Health</td>
+            <td th:text="${pokemon.damage}">Damage</td>
+            <td th:text="${pokemon.defense}">Defense</td>
+            <td th:text="${pokemon.size}">Size</td>
+            <button type="submit" class="btn btn-primary">Delete</button>
         </tr>
         </tbody>
     </table>
 </div>
 <p th:text="${name}"></p>
-<button type="submit" class="btn btn-primary">Create</button>
+<a href="addPokemon"><button type="submit" class="btn btn-primary">Create</button></a>
 </body>
 </html>

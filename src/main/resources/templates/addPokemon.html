@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Pokemon</title>
+</head>
+<body>
+<h1>Add your Pokemon characteristics:</h1>
+<form th:action="@{/successfully_added}" th:object="${pokemon}"
+      method="post">
+<label for="name">Name:</label><br>
+<input type="text" th:field="*{name}" id="name" name="name"><br>
+<label for="element">Element:</label><br>
+<input type="text" th:field="*{element}" id="element" name="element"><br>
+<label for="health">Health:</label><br>
+<input type="number" th:field="*{health}" id="health" name="health"><br>
+<label for="damage">Damage:</label><br>
+<input type="number" th:field="*{damage}" id="damage" name="damage"><br>
+<label for="defense">Defense:</label><br>
+<input type="number" th:field="*{defense}" id="defense" name="defense"><br>
+<label for="size">Size:</label><br>
+<input type="text" th:field="*{size}" id="size" name="size"><br>
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+</form>
+</body>
+</html>
