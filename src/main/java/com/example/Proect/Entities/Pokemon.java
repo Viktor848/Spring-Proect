@@ -1,4 +1,4 @@
-package com.example.Proect;
+package com.example.Proect.Entities;
 
 import com.sun.istack.NotNull;
 
