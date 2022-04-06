@@ -16,12 +16,15 @@ public class AppController {
 
     @Autowired
     private PokemonRepository pokemonRepository;
+    @Autowired
     private EnemyPokemonRepository enemyPokemonRepository;
 
     @GetMapping("/")
     public String index(Model model){
         List<Pokemon> listPokemons = pokemonRepository.findAll();
         model.addAttribute("listPokemons", listPokemons);
+        List<EnemyPokemon> listEnemyPokemons = enemyPokemonRepository.findAll();
+        model.addAttribute("listEnemyPokemons", listEnemyPokemons);
         return "index";
     }
 
@@ -65,16 +68,21 @@ public class AppController {
         return "index";
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @PostMapping("/successfully_deleted_pokemon")
     public String delete(@PathVariable("id") int id) {
-        pokemonRepository.delete(id);
-        return "redirect:/product";
+//        pokemonRepository.delete(id);
+        return "index";
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @PostMapping("/successfully_deleted_enemy_pokemon")
     public String deleteEnemyPokemon(@PathVariable("id") int id) {
-        enemyPokemonRepository.delete(id);
-        return "redirect:/product";
+//        enemyPokemonRepository.remove(id);
+        return "index";
+    }
+
+    @GetMapping("/battle")
+    public String battle(){
+        return "fight";
     }
 
 }

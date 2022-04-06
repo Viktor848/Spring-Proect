@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Add your Enemy's Pokemon characteristics:</h1>
-<form th:action="@{/successfully_added}" th:object="${enemyPokemon}"
+<form th:action="@{/successfully_added_enemy_pokemon}" th:object="${enemyPokemon}"
       method="post">
   <label for="name">Name:</label><br>
   <input type="text" th:field="*{name}" id="name" name="name"><br>
