@@ -51,8 +51,11 @@ padding: 15px 100px;
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="pokemon: ${listPokemons}">
-            <td> <input type="checkbox" name="favorite1" value="chocolate" /></td>
+            <form name="form1">
+            <td> <input type="checkbox" class="box"/></td>
+        </form>
             <td th:text="${pokemon.id}">Pokemon ID</td>
             <td th:text="${pokemon.name}">Name</td>
             <td th:text="${pokemon.element}">Element</td>
@@ -61,14 +64,15 @@ padding: 15px 100px;
             <td th:text="${pokemon.defense}">Defense</td>
             <td th:text="${pokemon.size}">Size</td>
             <td>
-                <a href="${pageContext.request.contextPath}/pokemon/delete/${pokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="/pokemon/{pokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
+
         </tbody>
     </table>
 </div>
 <p th:text="${name}"></p>
-<a href="addEnemyPokemon"><button type="submit" class="btn btn-primary">Create</button></a>
+<a href="addPokemon"><button type="submit" class="btn btn-primary">Create</button></a>
 </div>
 <div class = "split right">
     <h2>Enemy's Pokemons</h2>
@@ -96,7 +100,7 @@ padding: 15px 100px;
                 <td th:text="${enemyPokemon.defense}">Defense</td>
                 <td th:text="${enemyPokemon.size}">Size</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/enemyPokemon/delete/${enemyPokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <a href="/enemyPokemon/{enemyPokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
                 </td>
             </tr>
             </tbody>
