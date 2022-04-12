@@ -68,16 +68,14 @@ public class AppController {
         return "index";
     }
 
-    @PostMapping("/successfully_deleted_pokemon")
-    public String delete(@PathVariable("id") int id) {
-//        pokemonRepository.delete(id);
-        return "index";
+    @DeleteMapping("/pokemon/{pokemon.id}")
+    void deletePokemon(@PathVariable(value = "id") Long id) {
+        pokemonRepository.deleteById(id);
     }
 
-    @PostMapping("/successfully_deleted_enemy_pokemon")
-    public String deleteEnemyPokemon(@PathVariable("id") int id) {
-//        enemyPokemonRepository.remove(id);
-        return "index";
+    @DeleteMapping("/enemyPokemon/{enemyPokemon.id}")
+    void deleteEnemyPokemon(@PathVariable(value = "id") Long id) {
+        enemyPokemonRepository.deleteById(id);
     }
 
     @GetMapping("/battle")

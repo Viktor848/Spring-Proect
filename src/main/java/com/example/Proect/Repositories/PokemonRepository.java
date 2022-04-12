@@ -4,6 +4,5 @@ import com.example.Proect.Entities.Pokemon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository("pokemonRepository")
-public interface PokemonRepository extends JpaRepository<Pokemon, Integer> {
+public interface PokemonRepository extends JpaRepository<Pokemon, Long> {
 }
