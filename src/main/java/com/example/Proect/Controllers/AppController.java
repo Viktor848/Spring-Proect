@@ -20,13 +20,13 @@ public class AppController {
     private EnemyPokemonRepository enemyPokemonRepository;
 
     @GetMapping("/")
-    public String index(Model model){
-        List<Pokemon> listPokemons = pokemonRepository.findAll();
-        model.addAttribute("listPokemons", listPokemons);
-        List<EnemyPokemon> listEnemyPokemons = enemyPokemonRepository.findAll();
-        model.addAttribute("listEnemyPokemons", listEnemyPokemons);
-        return "index";
-    }
+        public String index(Model model){
+            List<Pokemon> listPokemons = pokemonRepository.findAll();
+            model.addAttribute("listPokemons", listPokemons);
+            List<EnemyPokemon> listEnemyPokemons = enemyPokemonRepository.findAll();
+            model.addAttribute("listEnemyPokemons", listEnemyPokemons);
+            return "index";
+        }
 
     @GetMapping("/addPokemon")
     public String addPokemon(Model model){
