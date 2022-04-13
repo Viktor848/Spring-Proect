@@ -47,15 +47,12 @@ padding: 15px 100px;
             <th>Damage</th>
             <th>Defense</th>
             <th>Size</th>
-
         </tr>
         </thead>
         <tbody>
 
         <tr th:each="pokemon: ${listPokemons}">
-            <form name="form1">
-            <td> <input type="checkbox" class="box"/></td>
-        </form>
+            <td> <input type="checkbox" name="myBooleanVariable" th:checked="${myBooleanVariable}"/></td>
             <td th:text="${pokemon.id}">Pokemon ID</td>
             <td th:text="${pokemon.name}">Name</td>
             <td th:text="${pokemon.element}">Element</td>
@@ -64,7 +61,9 @@ padding: 15px 100px;
             <td th:text="${pokemon.defense}">Defense</td>
             <td th:text="${pokemon.size}">Size</td>
             <td>
-                <a href="/pokemon/{pokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                <form th:action="@{/deletePokemon/{id}(id=${pokemon.id})}" method="post">
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
             </td>
         </tr>
 
@@ -100,15 +99,18 @@ padding: 15px 100px;
                 <td th:text="${enemyPokemon.defense}">Defense</td>
                 <td th:text="${enemyPokemon.size}">Size</td>
                 <td>
-                    <a href="/enemyPokemon/{enemyPokemon.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <form th:action="@{/deleteEnemyPokemon/{id}(id=${enemyPokemon.id})}" method="post">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
         <p th:text="${name}"></p>
-        <a href="addEnemyPokemon"><button type="submit" class="btn btn-primary">Create</button></a>
+        <a href="/addEnemyPokemon"><button type="submit" class="btn btn-primary">Create</button></a>
     </div>
     <center><a href="battle"><button type="submit" class="btn btn-primary" id="battle">Battle</button></a></center>
     </div>
+</form>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.example.Proect.Controllers;
 
 import com.example.Proect.Entities.EnemyPokemon;
 import com.example.Proect.Entities.Pokemon;
+import com.example.Proect.Repositories.ChosenPokemonsRepository;
 import com.example.Proect.Repositories.EnemyPokemonRepository;
 import com.example.Proect.Repositories.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class AppController {
     private PokemonRepository pokemonRepository;
     @Autowired
     private EnemyPokemonRepository enemyPokemonRepository;
+
+    @Autowired
+    private ChosenPokemonsRepository chosenPokemonsRepository;
 
     @GetMapping("/")
         public String index(Model model){
@@ -48,10 +52,11 @@ public class AppController {
         pokemon.setDamage(pokemon.getDamage());
         pokemon.setDefense(pokemon.getDefense());
         pokemon.setSize(pokemon.getSize());
+        pokemon.setCheck(pokemon.isCheck());
 
         pokemonRepository.save(pokemon);
 
-        return "index";
+        return "redirect:/";
     }
 
     @PostMapping("/successfully_added_enemy_pokemon")
@@ -65,22 +70,44 @@ public class AppController {
 
         enemyPokemonRepository.save(enemyPokemon);
 
-        return "index";
+        return "redirect:/";
     }
 
-    @DeleteMapping("/pokemon/{pokemon.id}")
-    void deletePokemon(@PathVariable(value = "id") Long id) {
-        pokemonRepository.deleteById(id);
+    @PostMapping("/deletePokemon/{id}")
+    public String deletePokemon(@PathVariable Long id) {
+        Pokemon pokemon = pokemonRepository.getById(id);
+        pokemonRepository.delete(pokemon);
+        return "redirect:/";
     }
 
-    @DeleteMapping("/enemyPokemon/{enemyPokemon.id}")
-    void deleteEnemyPokemon(@PathVariable(value = "id") Long id) {
-        enemyPokemonRepository.deleteById(id);
+    @PostMapping("deleteEnemyPokemon/{id}")
+    public String deleteEnemyPokemon(@PathVariable Long id){
+        EnemyPokemon enemyPokemon = enemyPokemonRepository.getById(id);
+        enemyPokemonRepository.delete(enemyPokemon);
+        return "redirect:/";
     }
 
     @GetMapping("/battle")
-    public String battle(){
+    public String battle(Model model){
+        List<Pokemon> chosenPokemons = chosenPokemonsRepository.findAll();
+        model.addAttribute("chosenPokemons", chosenPokemons);
         return "fight";
+    }
+
+    @PostMapping("/checked")
+    public void isChecked(Pokemon pokemon, Model model){
+        boolean myBooleanVariable = false;
+        model.addAttribute("myBooleanVariable", myBooleanVariable);
+        if (myBooleanVariable){
+            pokemon.setName(pokemon.getName());
+            pokemon.setElement(pokemon.getElement());
+            pokemon.setHealth(pokemon.getHealth());
+            pokemon.setDamage(pokemon.getDamage());
+            pokemon.setDefense(pokemon.getDefense());
+            pokemon.setSize(pokemon.getSize());
+            chosenPokemonsRepository.save(pokemon);
+
+        }
     }
 
 }

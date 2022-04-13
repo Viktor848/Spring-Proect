@@ -30,6 +30,9 @@ public class Pokemon {
     @NotNull
     private String size;
 
+    @Transient
+    private boolean check;
+
     public Long getId() {
         return id;
     }
@@ -84,6 +87,14 @@ public class Pokemon {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }
 
