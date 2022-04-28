@@ -8,8 +8,10 @@ import com.example.Proect.Repositories.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -45,7 +47,11 @@ public class AppController {
     }
 
     @PostMapping("/successfully_added")
-    public String added(Pokemon pokemon) {
+    public String added(@Valid Pokemon pokemon, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()){
+            return "addPokemon";
+        }
         pokemon.setName(pokemon.getName());
         pokemon.setElement(pokemon.getElement());
         pokemon.setHealth(pokemon.getHealth());
@@ -60,7 +66,11 @@ public class AppController {
     }
 
     @PostMapping("/successfully_added_enemy_pokemon")
-    public String addedEnemyPokemon(EnemyPokemon enemyPokemon) {
+    public String addedEnemyPokemon(@Valid EnemyPokemon enemyPokemon,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "addEnemyPokemon";
+        }
+
         enemyPokemon.setName(enemyPokemon.getName());
         enemyPokemon.setElement(enemyPokemon.getElement());
         enemyPokemon.setHealth(enemyPokemon.getHealth());

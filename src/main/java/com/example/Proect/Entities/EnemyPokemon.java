@@ -3,6 +3,7 @@ package com.example.Proect.Entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "enemy_pokemons")
@@ -13,21 +14,27 @@ public class EnemyPokemon {
     private Long id;
 
     @NotNull
+    @Size(min = 2,max = 20, message = "Pokemon name must have at least 2 characters")
     private String name;
 
     @NotNull
+    @Size(min = 2,max = 30)
     private String element;
 
     @NotNull
+    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int health;
 
     @NotNull
+    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int damage;
 
     @NotNull
+    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int defense;
 
     @NotNull
+    @Size(min = 1,max = 100,message = "Type number between 1 and 100")
     private String size;
 
     public Long getId() {
