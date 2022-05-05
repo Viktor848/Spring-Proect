@@ -1,9 +1,11 @@
 package com.example.Proect.Entities;
 
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Table(name = "pokemons")
@@ -17,27 +19,25 @@ public class Pokemon {
     private String name;
 
     @NotNull
-    @Size(min = 2,max = 15,message = "add valid element")
     private String element;
 
     @NotNull
-    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int health;
 
     @NotNull
-    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int damage;
 
     @NotNull
-    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private int defense;
 
     @NotNull
-    @Size(min = 1,max = 100,message = "Type a number between 1 and 100")
     private String size;
 
-    @Transient
-    private boolean check;
+    private Long pokemon1ID;
+
+    private Long pokemon2ID;
+
+    private Long pokemon3ID;
 
     public Long getId() {
         return id;
@@ -95,12 +95,28 @@ public class Pokemon {
         this.size = size;
     }
 
-    public boolean isCheck() {
-        return check;
+    public Long getPokemon1ID() {
+        return pokemon1ID;
     }
 
-    public void setCheck(boolean check) {
-        this.check = check;
+    public void setPokemon1ID(Long pokemon1ID) {
+        this.pokemon1ID = pokemon1ID;
+    }
+
+    public Long getPokemon2ID() {
+        return pokemon2ID;
+    }
+
+    public void setPokemon2ID(Long pokemon2ID) {
+        this.pokemon2ID = pokemon2ID;
+    }
+
+    public Long getPokemon3ID() {
+        return pokemon3ID;
+    }
+
+    public void setPokemon3ID(Long pokemon3ID) {
+        this.pokemon3ID = pokemon3ID;
     }
 }
 

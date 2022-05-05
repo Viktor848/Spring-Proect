@@ -38,21 +38,13 @@ body{background-color:whitesmoke;}
         <thead class="thead-dark">
         <tr>
             <th>Name</th>
-            <th>Element</th>
             <th>Health</th>
-            <th>Damage</th>
-            <th>Defense</th>
-            <th>Size</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="pokemon: ${chosenPokemons}">
+        <tr th:each="pokemon: ${listChosenPokemons}">
             <td th:text="${pokemon.name}">Name</td>
-            <td th:text="${pokemon.element}">Element</td>
             <td th:text="${pokemon.health}">Health</td>
-            <td th:text="${pokemon.damage}">Damage</td>
-            <td th:text="${pokemon.defense}">Defense</td>
-            <td th:text="${pokemon.size}">Size</td>
         </tr>
         </tbody>
     </table>

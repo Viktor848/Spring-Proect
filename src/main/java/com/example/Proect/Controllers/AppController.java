@@ -1,17 +1,17 @@
 package com.example.Proect.Controllers;
 
+import com.example.Proect.Entities.Team;
 import com.example.Proect.Entities.EnemyPokemon;
 import com.example.Proect.Entities.Pokemon;
-import com.example.Proect.Repositories.ChosenPokemonsRepository;
+import com.example.Proect.Repositories.TeamRepository;
 import com.example.Proect.Repositories.EnemyPokemonRepository;
 import com.example.Proect.Repositories.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,16 +21,17 @@ public class AppController {
     private PokemonRepository pokemonRepository;
     @Autowired
     private EnemyPokemonRepository enemyPokemonRepository;
-
     @Autowired
-    private ChosenPokemonsRepository chosenPokemonsRepository;
+    private TeamRepository teamRepository;
 
     @GetMapping("/")
         public String index(Model model){
             List<Pokemon> listPokemons = pokemonRepository.findAll();
             model.addAttribute("listPokemons", listPokemons);
+            model.addAttribute("pokemon", new Pokemon());
             List<EnemyPokemon> listEnemyPokemons = enemyPokemonRepository.findAll();
             model.addAttribute("listEnemyPokemons", listEnemyPokemons);
+            model.addAttribute("enemyPokemon", new EnemyPokemon());
             return "index";
         }
 
@@ -47,18 +48,13 @@ public class AppController {
     }
 
     @PostMapping("/successfully_added")
-    public String added(@Valid Pokemon pokemon, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()){
-            return "addPokemon";
-        }
+    public String added(Pokemon pokemon) {
         pokemon.setName(pokemon.getName());
         pokemon.setElement(pokemon.getElement());
         pokemon.setHealth(pokemon.getHealth());
         pokemon.setDamage(pokemon.getDamage());
         pokemon.setDefense(pokemon.getDefense());
         pokemon.setSize(pokemon.getSize());
-        pokemon.setCheck(pokemon.isCheck());
 
         pokemonRepository.save(pokemon);
 
@@ -66,11 +62,7 @@ public class AppController {
     }
 
     @PostMapping("/successfully_added_enemy_pokemon")
-    public String addedEnemyPokemon(@Valid EnemyPokemon enemyPokemon,BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "addEnemyPokemon";
-        }
-
+    public String addedEnemyPokemon(EnemyPokemon enemyPokemon) {
         enemyPokemon.setName(enemyPokemon.getName());
         enemyPokemon.setElement(enemyPokemon.getElement());
         enemyPokemon.setHealth(enemyPokemon.getHealth());
@@ -99,25 +91,37 @@ public class AppController {
 
     @GetMapping("/battle")
     public String battle(Model model){
-        List<Pokemon> chosenPokemons = chosenPokemonsRepository.findAll();
-        model.addAttribute("chosenPokemons", chosenPokemons);
+        ArrayList<Pokemon> chosenPokemons = new ArrayList<>();
+        for (Long i = 0L; i <= teamRepository.count(); i++) {
+            if(i == teamRepository.count()){
+                Team pokemons = teamRepository.getById(i);
+                Pokemon pokemon1 = pokemonRepository.getById(pokemons.getPokemon1());
+                Pokemon pokemon2 = pokemonRepository.getById(pokemons.getPokemon2());
+                Pokemon pokemon3 = pokemonRepository.getById(pokemons.getPokemon3());
+                chosenPokemons.add(pokemon1);
+                chosenPokemons.add(pokemon2);
+                chosenPokemons.add(pokemon3);
+            }
+        }
+        model.addAttribute("listChosenPokemons", chosenPokemons);
         return "fight";
     }
 
-    @PostMapping("/checked")
-    public void isChecked(Pokemon pokemon, Model model){
-        boolean myBooleanVariable = false;
-        model.addAttribute("myBooleanVariable", myBooleanVariable);
-        if (myBooleanVariable){
-            pokemon.setName(pokemon.getName());
-            pokemon.setElement(pokemon.getElement());
-            pokemon.setHealth(pokemon.getHealth());
-            pokemon.setDamage(pokemon.getDamage());
-            pokemon.setDefense(pokemon.getDefense());
-            pokemon.setSize(pokemon.getSize());
-            chosenPokemonsRepository.save(pokemon);
+    @PostMapping("/chosen")
+    public String selectOption(Model model, Team pokemons, Pokemon pokemon) {
+        model.addAttribute("pokemon", new Pokemon());
+        Long id1 = pokemon.getPokemon1ID();
 
-        }
+        Long id2 = pokemon.getPokemon2ID();
+
+        Long id3 = pokemon.getPokemon3ID();
+
+        pokemons.setPokemon1(id1);
+        pokemons.setPokemon2(id2);
+        pokemons.setPokemon3(id3);
+        teamRepository.save(pokemons);
+        model.addAttribute("teamPokemons", pokemons);
+
+        return "redirect:/battle";
     }
-
 }
