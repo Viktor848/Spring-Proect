@@ -6,6 +6,22 @@
     <meta charset="UTF-8">
     <title>Fight</title>
     <style>
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 10;
+  overflow-x: hidden;
+}
+.left {
+  left: 3%;
+}
+
+.right {
+  right: -30%;
+}
+
 #attack{
 position:relative;
 margin-top:30%;
@@ -34,20 +50,22 @@ body{background-color:whitesmoke;}
     </style>
 </head>
 <body>
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Health</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="pokemon: ${listChosenPokemons}">
-            <td th:text="${pokemon.name}">Name</td>
-            <td th:text="${pokemon.health}">Health</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="split left">
+    <p style="font-size: 1rem;" th:text="${pokemon2Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${pokemon2Name}"></p>
+    <p style="font-size: 1rem;" th:text="${pokemon3Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${pokemon3Name}"></p>
+    <p style="font-size: 2rem;" th:text="${pokemon1Health}"></p>
+    <p style="font-size: 2.5rem;" th:text="${pokemon1Name}"></p>
+</div>
+    <div class="split right">
+        <p style="font-size: 1rem;" th:text="${enemyPokemon2Health}"></p>
+        <p style="font-size: 1.5rem;" th:text="${enemyPokemon2Name}"></p>
+        <p style="font-size: 1rem;" th:text="${enemyPokemon3Health}"></p>
+        <p style="font-size: 1.5rem;" th:text="${enemyPokemon3Name}"></p>
+        <p style="font-size: 2rem;" th:text="${enemyPokemon1Health}"></p>
+        <p style="font-size: 2.5rem;" th:text="${enemyPokemon1Name}"></p>
+    </div>
 
 <button type="submit" class="btn btn-primary" id="attack">Attack</button>
 <button type="submit" class="btn btn-primary" id="block">Block</button>
