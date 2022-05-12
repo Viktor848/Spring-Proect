@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>In Battle</title>
+  <style>
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 10;
+  overflow-x: hidden;
+}
+.left {
+  left: 3%;
+}
+
+.right {
+  right: -30%;
+}
+
+<!--#attack{-->
+<!--position:relative;-->
+<!--margin-top:30%;-->
+<!--left:3%;-->
+<!--font-size: 3rem;-->
+<!--padding: 10px 50px;-->
+<!--background-color: red;-->
+<!--}-->
+<!--#block{-->
+<!--position:relative;-->
+<!--margin-top:30%;-->
+<!--left:3%;-->
+<!--font-size: 3rem;-->
+<!--padding: 10px 50px;-->
+<!--background-color: blue;-->
+<!--}-->
+<!--#heal{-->
+<!--position:relative;-->
+<!--margin-top:30%;-->
+<!--left:3%;-->
+<!--font-size: 3rem;-->
+<!--padding: 10px 50px;-->
+<!--background-color:green;-->
+<!--}-->
+body{background-color:whitesmoke;}
+    </style>
+</head>
+<body>
+<div class="split left" th:object="pokemon">
+  <p style="font-size: 1rem;" th:text="${pokemon3Health}"></p>
+  <p style="font-size: 1.5rem;" th:text="${pokemon3Name}"></p>
+  <p style="font-size: 1rem;" th:text="${pokemon2Health}"></p>
+  <p style="font-size: 1.5rem;" th:text="${pokemon2Name}"></p>
+  <p style="font-size: 2rem;" th:text="${pokemon1Health}"></p>
+  <p style="font-size: 2.5rem;" th:text="${pokemon1.he}"></p>
+</div>
+<div class="split right">
+  <p style="font-size: 1rem;" th:text="${enemyPokemon3Health}"></p>
+  <p style="font-size: 1.5rem;" th:text="${enemyPokemon3Name}"></p>
+  <p style="font-size: 1rem;" th:text="${enemyPokemon2Health}"></p>
+  <p style="font-size: 1.5rem;" th:text="${enemyPokemon2Name}"></p>
+  <p style="font-size: 2rem;" th:text="${enemyPokemon1Health}"></p>
+  <p style="font-size: 2.5rem;" th:text="${enemyPokemon1Name}"></p>
+</div>
+
+<form th:action="@{/battle/attack}" method="post">
+  <button type="submit" class="btn btn-primary" id="attack">Attack</button>
+</form>
+<form th:action="@{/battle/heal}" method="post">
+<button type="submit" class="btn btn-primary" id="heal">Heal</button>
+</form>
+<button type="submit" class="btn btn-primary" id="block">Block</button>
+</body>
+</html>
