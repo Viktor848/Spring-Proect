@@ -23,6 +23,7 @@
 }
 
 <!--#attack{-->
+<!--position:relative;-->
 <!--margin-top:30%;-->
 <!--left:3%;-->
 <!--font-size: 3rem;-->
@@ -49,46 +50,28 @@ body{background-color:whitesmoke;}
     </style>
 </head>
 <body>
-<div class="split left" th:each="pokemon: ${pokemonTeam}">
-    <p style="font-size: 1rem;" th:text="${pokemon[2].health}"></p>
-    <p style="font-size: 1.5rem;" th:text="${pokemon[2].name}"></p>
-    <p style="font-size: 1rem;" th:text="${pokemon[1].health}"></p>
-    <p style="font-size: 1.5rem;" th:text="${pokemon[1].name}"></p>
-    <p style="font-size: 2rem;" th:text="${pokemon[0].health}"></p>
-    <p style="font-size: 2.5rem;" th:text="${pokemon[0].name}"></p>
+<div class="split left">
+    <p style="font-size: 1rem;" th:text="${pokemon2Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${pokemon2Name}"></p>
+    <p style="font-size: 1rem;" th:text="${pokemon3Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${pokemon3Name}"></p>
+    <p style="font-size: 2rem;" th:text="${pokemon1Health}"></p>
+    <p style="font-size: 2.5rem;" th:text="${pokemon1Name}"></p>
 </div>
-    <div class="split right" th:each="enemyPokemon: ${enemyTeam}">
-        <div th:if="${enemyTeam[0].health > 0}">
-            <p style="font-size: 1rem;" th:text="${enemyTeam[2].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[2].name}"></p>
-            <p style="font-size: 1rem;" th:text="${enemyTeam[1].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[1].name}"></p>
-            <p style="font-size: 2rem;" th:text="${enemyTeam[0].health}"></p>
-            <p style="font-size: 2.5rem;" th:text="${enemyTeam[0].name}"></p>
-        </div>
-        <div th:if="${enemyTeam[0].health <= 0}">
-            <p style="font-size: 1rem;" th:text="${enemyTeam[0].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[0].name}"></p>
-            <p style="font-size: 1rem;" th:text="${enemyTeam[2].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[2].name}"></p>
-            <p style="font-size: 2rem;" th:text="${enemyTeam[1].health}"></p>
-            <p style="font-size: 2.5rem;" th:text="${enemyTeam[1].name}"></p>
-        </div>
-        <div th:if="${enemyTeam[0].health <= 0} and ${enemyTeam[1].health <= 0}">
-            <p style="font-size: 1rem;" th:text="${enemyTeam[0].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[0].name}"></p>
-            <p style="font-size: 1rem;" th:text="${enemyTeam[1].health}"></p>
-            <p style="font-size: 1.5rem;" th:text="${enemyTeam[1].name}"></p>
-            <p style="font-size: 2rem;" th:text="${enemyTeam[2].health}"></p>
-            <p style="font-size: 2.5rem;" th:text="${enemyTeam[2].name}"></p>
-        </div>
-    </div>
+<div class="split right">
+    <p style="font-size: 1rem;" th:text="${enemyPokemon2Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${enemyPokemon2Name}"></p>
+    <p style="font-size: 1rem;" th:text="${enemyPokemon3Health}"></p>
+    <p style="font-size: 1.5rem;" th:text="${enemyPokemon3Name}"></p>
+    <p style="font-size: 2rem;" th:text="${enemyPokemon1Health}"></p>
+    <p style="font-size: 2.5rem;" th:text="${enemyPokemon1Name}"></p>
+</div>
 
 <form th:action="@{/battle/attack}" method="post">
 <button type="submit" class="btn btn-primary" id="attack">Attack</button>
 </form>
 <form th:action="@{/battle/heal}" method="post">
-    <button type="submit" class="btn btn-primary" id="heal">Heal</button>
+<button type="submit" class="btn btn-primary" id="heal">Heal</button>
 </form>
 <button type="submit" class="btn btn-primary" id="block">Block</button>
 </body>

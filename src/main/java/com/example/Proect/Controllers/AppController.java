@@ -93,76 +93,81 @@ public class AppController {
     }
 
     @GetMapping("/battle")
-    public String battle(Model model, PokemonsInBattle pokemonsInBattle){
-        ArrayList<Pokemon> chosenPokemons = new ArrayList<>();
-        for (Long i = 0L; i <= teamRepository.count(); i++) {
-            if(i == teamRepository.count()){
-                Team pokemons = teamRepository.getById(i);
-                Pokemon pokemon1 = pokemonRepository.getById(pokemons.getPokemon1());
-                Pokemon pokemon2 = pokemonRepository.getById(pokemons.getPokemon2());
-                Pokemon pokemon3 = pokemonRepository.getById(pokemons.getPokemon3());
-                chosenPokemons.add(pokemon1);
-                pokemonsInBattle.setPokemon1ID(pokemon1.getId());
-                chosenPokemons.add(pokemon2);
-                pokemonsInBattle.setPokemon2ID(pokemon2.getId());
-                chosenPokemons.add(pokemon3);
-                pokemonsInBattle.setPokemon3ID(pokemon3.getId());
+        public String battle(Model model, PokemonsInBattle pokemonsInBattle){
+            ArrayList<Pokemon> chosenPokemons = new ArrayList<>();
+            for (Long i = 0L; i <= teamRepository.count(); i++) {
+                if(i == teamRepository.count()){
+                    Team pokemons = teamRepository.getById(i);
+                    Pokemon pokemon1 = pokemonRepository.getById(pokemons.getPokemon1());
+                    Pokemon pokemon2 = pokemonRepository.getById(pokemons.getPokemon2());
+                    Pokemon pokemon3 = pokemonRepository.getById(pokemons.getPokemon3());
+                    chosenPokemons.add(pokemon1);
+                    pokemonsInBattle.setPokemon1_name(pokemon1.getName());
+                    pokemonsInBattle.setPokemon1_health(pokemon1.getHealth());
+                    pokemonsInBattle.setPokemon1_damage(pokemon1.getDamage());
+                    chosenPokemons.add(pokemon2);
+                    pokemonsInBattle.setPokemon2_name(pokemon2.getName());
+                    pokemonsInBattle.setPokemon2_health(pokemon2.getHealth());
+                    pokemonsInBattle.setPokemon2_damage(pokemon2.getDamage());
+                    chosenPokemons.add(pokemon3);
+                    pokemonsInBattle.setPokemon3_name(pokemon3.getName());
+                    pokemonsInBattle.setPokemon3_health(pokemon3.getHealth());
+                    pokemonsInBattle.setPokemon3_damage(pokemon3.getDamage());
+                }
             }
-        }
 
-        ArrayList<EnemyPokemon> enemyPokemons = new ArrayList<>();
-        EnemyPokemon lastID = enemyPokemonRepository.findTopByOrderByIdDesc();
-        ArrayList<Long> ids = new ArrayList<>();
-        ArrayList<Long> ids2 = new ArrayList<>();
-        while (enemyPokemons.size() < 3) {
-            long leftLimit = 1L;
-            long rightLimit = lastID.getId();
+            ArrayList<EnemyPokemon> enemyPokemons = new ArrayList<>();
+            EnemyPokemon lastID = enemyPokemonRepository.findTopByOrderByIdDesc();
+            ArrayList<Long> ids = new ArrayList<>();
+            ArrayList<Long> ids2 = new ArrayList<>();
+            while (enemyPokemons.size() < 3) {
+                long leftLimit = 1L;
+                long rightLimit = lastID.getId();
+                long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
 
-            for (Long i = leftLimit; i <= rightLimit; i++) {
-                ids.add(i);
-            }
-            Collections.shuffle(ids);
-            for (int i = 0; i < ids.size(); i++) {
+                for (Long i = leftLimit; i <= rightLimit; i++) {
+                    ids.add(i);
+                }
+                Collections.shuffle(ids);
+                for (int i = 0; i < ids.size(); i++) {
                     if (enemyPokemonRepository.existsById(ids.get(i))) {
                         ids2.add(ids.get(i));
                     }
+                }
+                for (int i = 0; i < 3; i++) {
+                    enemyPokemons.add(enemyPokemonRepository.getById(ids2.get(i)));
+                }
+                pokemonsInBattle.setEnemyPokemon1_name(enemyPokemonRepository.getById(ids2.get(0)).getName());
+                pokemonsInBattle.setEnemyPokemon1_health(enemyPokemonRepository.getById(ids2.get(0)).getHealth());
+                pokemonsInBattle.setEnemyPokemon1_damage(enemyPokemonRepository.getById(ids2.get(0)).getDamage());
+                pokemonsInBattle.setEnemyPokemon2_name(enemyPokemonRepository.getById(ids2.get(1)).getName());
+                pokemonsInBattle.setEnemyPokemon2_health(enemyPokemonRepository.getById(ids2.get(1)).getHealth());
+                pokemonsInBattle.setEnemyPokemon2_damage(enemyPokemonRepository.getById(ids2.get(1)).getDamage());
+                pokemonsInBattle.setEnemyPokemon3_name(enemyPokemonRepository.getById(ids2.get(2)).getName());
+                pokemonsInBattle.setEnemyPokemon3_health(enemyPokemonRepository.getById(ids2.get(2)).getHealth());
+                pokemonsInBattle.setEnemyPokemon3_damage(enemyPokemonRepository.getById(ids2.get(2)).getDamage());
             }
-            for (int i = 0; i < 3; i++) {
-                enemyPokemons.add(enemyPokemonRepository.getById(ids2.get(i)));
-            }
-            pokemonsInBattle.setEnemyPokemon1ID(enemyPokemonRepository.getById(ids2.get(0)).getId());
-            pokemonsInBattle.setEnemyPokemon2ID(enemyPokemonRepository.getById(ids2.get(1)).getId());
-            pokemonsInBattle.setEnemyPokemon3ID(enemyPokemonRepository.getById(ids2.get(2)).getId());
+            model.addAttribute("listChosenPokemons", chosenPokemons);
+            pokemonsInBattleRepository.save(pokemonsInBattle);
+            ArrayList<PokemonsInBattle> pokemonsInBattleList = new ArrayList<>();
+            PokemonsInBattle lastRow = pokemonsInBattleRepository.findTopByOrderByIdDesc();
+            pokemonsInBattleList.add(pokemonsInBattleRepository.getById(lastRow.getId()));
+
+            model.addAttribute("pokemonInBattle", new PokemonsInBattle());
+            model.addAttribute("pokemon1Name", pokemonsInBattleList.get(0).getPokemon1_name());
+            model.addAttribute("pokemon1Health", pokemonsInBattleList.get(0).getPokemon1_health());
+            model.addAttribute("pokemon2Name", pokemonsInBattleList.get(0).getPokemon2_name());
+            model.addAttribute("pokemon2Health", pokemonsInBattleList.get(0).getPokemon2_health());
+            model.addAttribute("pokemon3Name", pokemonsInBattleList.get(0).getPokemon3_name());
+            model.addAttribute("pokemon3Health", pokemonsInBattleList.get(0).getPokemon3_health());
+            model.addAttribute("enemyPokemon1Name", pokemonsInBattleList.get(0).getEnemyPokemon1_name());
+            model.addAttribute("enemyPokemon1Health", pokemonsInBattleList.get(0).getEnemyPokemon1_health());
+            model.addAttribute("enemyPokemon2Name", pokemonsInBattleList.get(0).getEnemyPokemon2_name());
+            model.addAttribute("enemyPokemon2Health", pokemonsInBattleList.get(0).getEnemyPokemon2_health());
+            model.addAttribute("enemyPokemon3Name", pokemonsInBattleList.get(0).getEnemyPokemon3_name());
+            model.addAttribute("enemyPokemon3Health", pokemonsInBattleList.get(0).getEnemyPokemon3_health());
+            return "fight";
         }
-
-        pokemonsInBattleRepository.save(pokemonsInBattle);
-        ArrayList<PokemonsInBattle> pokemonsInBattleList = new ArrayList<>();
-        PokemonsInBattle lastRow = pokemonsInBattleRepository.findTopByOrderByIdDesc();
-        pokemonsInBattleList.add(pokemonsInBattleRepository.getById(lastRow.getId()));
-
-        ArrayList<Pokemon> pokemonTeam = new ArrayList<>();
-        Pokemon pokemon1 = pokemonRepository.getById(pokemonsInBattle.getPokemon1ID());
-        Pokemon pokemon2 = pokemonRepository.getById(pokemonsInBattle.getPokemon2ID());
-        Pokemon pokemon3 = pokemonRepository.getById(pokemonsInBattle.getPokemon3ID());
-        pokemonTeam.add(pokemon1);
-        pokemonTeam.add(pokemon2);
-        pokemonTeam.add(pokemon3);
-
-        ArrayList<EnemyPokemon> enemyTeam = new ArrayList<>();
-        EnemyPokemon enemyPokemon1 = enemyPokemonRepository.getById(pokemonsInBattle.getEnemyPokemon1ID());
-        EnemyPokemon enemyPokemon2 = enemyPokemonRepository.getById(pokemonsInBattle.getEnemyPokemon2ID());
-        EnemyPokemon enemyPokemon3 = enemyPokemonRepository.getById(pokemonsInBattle.getEnemyPokemon3ID());
-        enemyTeam.add(enemyPokemon1);
-        enemyTeam.add(enemyPokemon2);
-        enemyTeam.add(enemyPokemon3);
-
-        model.addAttribute("pokemon", new Pokemon());
-        model.addAttribute("enemyPokemon", new EnemyPokemon());
-        model.addAttribute("pokemonTeam", pokemonTeam);
-        model.addAttribute("enemyTeam", enemyTeam);
-
-        return "fight";
-    }
 
     @PostMapping("/chosen")
     public String selectOption(Model model, Team pokemons, Pokemon pokemon) {
@@ -185,80 +190,48 @@ public class AppController {
     @PostMapping("/battle/attack")
     public String attack(Model model){
         Optional<PokemonsInBattle> pokemonsInBattle = pokemonsInBattleRepository.findById(pokemonsInBattleRepository.count());
-        ArrayList<Pokemon> pokemonTeam = new ArrayList<>();
-        Pokemon pokemon1 = pokemonRepository.getById(pokemonsInBattle.get().getPokemon1ID());
-        Pokemon pokemon2 = pokemonRepository.getById(pokemonsInBattle.get().getPokemon2ID());
-        Pokemon pokemon3 = pokemonRepository.getById(pokemonsInBattle.get().getPokemon3ID());
-        pokemonTeam.add(pokemon1);
-        pokemonTeam.add(pokemon2);
-        pokemonTeam.add(pokemon3);
-
-
-        ArrayList<EnemyPokemon> enemyTeam = new ArrayList<>();
-        EnemyPokemon enemyPokemon1 = enemyPokemonRepository.getById(pokemonsInBattle.get().getEnemyPokemon1ID());
-        EnemyPokemon enemyPokemon2 = enemyPokemonRepository.getById(pokemonsInBattle.get().getEnemyPokemon2ID());
-        EnemyPokemon enemyPokemon3 = enemyPokemonRepository.getById(pokemonsInBattle.get().getEnemyPokemon3ID());
-        enemyTeam.add(enemyPokemon1);
-        enemyTeam.add(enemyPokemon2);
-        enemyTeam.add(enemyPokemon3);
-
         Random random = new Random();
-
-            while (enemyPokemon1.getHealth() > 0) {
-                int randomDamage = random.nextInt(pokemonTeam.get(0).getDamage());
-                int dealtDamage = enemyTeam.get(0).getHealth() - randomDamage;
-                enemyTeam.get(0).setHealth(dealtDamage);
-
-                model.addAttribute("enemyPokemon1", enemyPokemon1);
-                model.addAttribute("enemyPokemon2", enemyPokemon2);
-                model.addAttribute("enemyPokemon3", enemyPokemon3);
-            }
-
-            if (enemyPokemon1.getHealth() <= 0) {
-                int randomDamage = random.nextInt(pokemonTeam.get(0).getDamage());
-                int dealtDamage = enemyTeam.get(1).getHealth() - randomDamage;
-                enemyTeam.get(1).setHealth(dealtDamage);
-
-                model.addAttribute("enemyPokemon1", enemyPokemon2);
-                model.addAttribute("enemyPokemon2", enemyPokemon3);
-                model.addAttribute("enemyPokemon3", enemyPokemon1);
-            }
-
-            if (enemyPokemon1.getHealth() <= 0 && enemyPokemon2.getHealth() <= 0) {
-                int randomDamage = random.nextInt(pokemonTeam.get(0).getDamage());
-                int dealtDamage = enemyTeam.get(2).getHealth() - randomDamage;
-                enemyTeam.get(2).setHealth(dealtDamage);
-
-                model.addAttribute("enemyPokemon1", enemyPokemon3);
-                model.addAttribute("enemyPokemon2", enemyPokemon2);
-                model.addAttribute("enemyPokemon3", enemyPokemon1);
-            }
-
+        int randomDamage = random.nextInt(pokemonsInBattle.get().getPokemon1_damage());
+        int dealtDamage = pokemonsInBattle.get().getEnemyPokemon1_health() - randomDamage;
+        pokemonsInBattle.get().setEnemyPokemon1_health(dealtDamage);
+        model.addAttribute("pokemonInBattle", new PokemonsInBattle());
+        model.addAttribute("pokemon1Name", pokemonsInBattle.get().getPokemon1_name());
+        model.addAttribute("pokemon1Health", pokemonsInBattle.get().getPokemon1_health());
+        model.addAttribute("pokemon2Name", pokemonsInBattle.get().getPokemon2_name());
+        model.addAttribute("pokemon2Health", pokemonsInBattle.get().getPokemon2_health());
+        model.addAttribute("pokemon3Name", pokemonsInBattle.get().getPokemon3_name());
+        model.addAttribute("pokemon3Health", pokemonsInBattle.get().getPokemon3_health());
+        model.addAttribute("enemyPokemon1Name", pokemonsInBattle.get().getEnemyPokemon1_name());
+        model.addAttribute("enemyPokemon1Health", pokemonsInBattle.get().getEnemyPokemon1_health());
+        model.addAttribute("enemyPokemon2Name", pokemonsInBattle.get().getEnemyPokemon2_name());
+        model.addAttribute("enemyPokemon2Health", pokemonsInBattle.get().getEnemyPokemon2_health());
+        model.addAttribute("enemyPokemon3Name", pokemonsInBattle.get().getEnemyPokemon3_name());
+        model.addAttribute("enemyPokemon3Health", pokemonsInBattle.get().getEnemyPokemon3_health());
+        pokemonsInBattleRepository.save(pokemonsInBattle.get());
         return "duringFight";
     }
 
-//    @PostMapping("/battle/heal")
-//
-//    public String heal(Model model){
-//        Optional<PokemonsInBattle> pokemonsInBattle = pokemonsInBattleRepository.findById(pokemonsInBattleRepository.count());
-//        Random random = new Random();
-//        int randomHeal = random.nextInt(pokemonsInBattle.get().getPokemon1_health() / 2);
-//        int healed = pokemonsInBattle.get().getPokemon1_health() + randomHeal;
-//        pokemonsInBattle.get().setPokemon1_health(healed);
-//        model.addAttribute("pokemonInBattle", new PokemonsInBattle());
-//        model.addAttribute("pokemon1Name", pokemonsInBattle.get().getPokemon1_name());
-//        model.addAttribute("pokemon1Health", pokemonsInBattle.get().getPokemon1_health());
-//        model.addAttribute("pokemon2Name", pokemonsInBattle.get().getPokemon2_name());
-//        model.addAttribute("pokemon2Health", pokemonsInBattle.get().getPokemon2_health());
-//        model.addAttribute("pokemon3Name", pokemonsInBattle.get().getPokemon3_name());
-//        model.addAttribute("pokemon3Health", pokemonsInBattle.get().getPokemon3_health());
-//        model.addAttribute("enemyPokemon1Name", pokemonsInBattle.get().getEnemyPokemon1_name());
-//        model.addAttribute("enemyPokemon1Health", pokemonsInBattle.get().getEnemyPokemon1_health());
-//        model.addAttribute("enemyPokemon2Name", pokemonsInBattle.get().getEnemyPokemon2_name());
-//        model.addAttribute("enemyPokemon2Health", pokemonsInBattle.get().getEnemyPokemon2_health());
-//        model.addAttribute("enemyPokemon3Name", pokemonsInBattle.get().getEnemyPokemon3_name());
-//        model.addAttribute("enemyPokemon3Health", pokemonsInBattle.get().getEnemyPokemon3_health());
-//        pokemonsInBattleRepository.save(pokemonsInBattle.get());
-//        return "duringFight";
-//    }
+    @PostMapping("/battle/heal")
+    public String heal(Model model){
+        Optional<PokemonsInBattle> pokemonsInBattle = pokemonsInBattleRepository.findById(pokemonsInBattleRepository.count());
+        Random random = new Random();
+        int randomHeal = random.nextInt(pokemonsInBattle.get().getPokemon1_health() / 2);
+        int healed = pokemonsInBattle.get().getPokemon1_health() + randomHeal;
+        pokemonsInBattle.get().setPokemon1_health(healed);
+        model.addAttribute("pokemonInBattle", new PokemonsInBattle());
+        model.addAttribute("pokemon1Name", pokemonsInBattle.get().getPokemon1_name());
+        model.addAttribute("pokemon1Health", pokemonsInBattle.get().getPokemon1_health());
+        model.addAttribute("pokemon2Name", pokemonsInBattle.get().getPokemon2_name());
+        model.addAttribute("pokemon2Health", pokemonsInBattle.get().getPokemon2_health());
+        model.addAttribute("pokemon3Name", pokemonsInBattle.get().getPokemon3_name());
+        model.addAttribute("pokemon3Health", pokemonsInBattle.get().getPokemon3_health());
+        model.addAttribute("enemyPokemon1Name", pokemonsInBattle.get().getEnemyPokemon1_name());
+        model.addAttribute("enemyPokemon1Health", pokemonsInBattle.get().getEnemyPokemon1_health());
+        model.addAttribute("enemyPokemon2Name", pokemonsInBattle.get().getEnemyPokemon2_name());
+        model.addAttribute("enemyPokemon2Health", pokemonsInBattle.get().getEnemyPokemon2_health());
+        model.addAttribute("enemyPokemon3Name", pokemonsInBattle.get().getEnemyPokemon3_name());
+        model.addAttribute("enemyPokemon3Health", pokemonsInBattle.get().getEnemyPokemon3_health());
+        pokemonsInBattleRepository.save(pokemonsInBattle.get());
+        return "duringFight";
+    }
 }
